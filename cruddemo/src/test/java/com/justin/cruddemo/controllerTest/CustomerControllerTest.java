@@ -2,8 +2,10 @@ package com.justin.cruddemo.controllerTest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,6 +43,8 @@ public class CustomerControllerTest {
 	
 	private Customer customer;
 	 
+	private String id;
+	
 	 @BeforeEach
 	    void setUp() {  
 		 this.customerList = new ArrayList<Customer>();
@@ -49,8 +53,10 @@ public class CustomerControllerTest {
 		 this.customerList.add(new Customer("Tony", "Stark"));
 		 
 		 customer= new Customer("1","Zen", "John");
+		 id = "5ebdfbf220329060da68aae3";
 		 
 	 }
+	 
 	@Test
 	public void getAllCustomerTest() throws Exception {
 				        
@@ -65,6 +71,35 @@ public class CustomerControllerTest {
         
 		MvcResult result = 
         this.mockMvc.perform(post("/customer/").contentType(MediaType.APPLICATION_JSON_VALUE).content(json)).andReturn();
+        
+		int status = result.getResponse().getStatus();
+		System.out.println(status);
+	}
+	
+	@Test
+	public void addCustomer() throws Exception {
+        
+		MvcResult result = this.mockMvc.perform(put("/customer/")).andReturn();
+        
+		int status = result.getResponse().getStatus();
+		System.out.println(status);
+	}
+
+	@Test
+	public void deleteCustomer() throws Exception {
+        
+		String json = objectMapper.writeValueAsString(id);
+		MvcResult result = this.mockMvc.perform(delete("/customer/").contentType(MediaType.APPLICATION_JSON_VALUE).content(json)).andReturn();
+        
+		int status = result.getResponse().getStatus();
+		System.out.println(status);
+	}
+	
+	@Test
+	public void getCustomer() throws Exception {
+        
+		String json = objectMapper.writeValueAsString(id);
+		MvcResult result = this.mockMvc.perform(get("/customer/").contentType(MediaType.APPLICATION_JSON_VALUE).content(json)).andReturn();
         
 		int status = result.getResponse().getStatus();
 		System.out.println(status);
